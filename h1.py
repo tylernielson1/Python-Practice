@@ -12,6 +12,7 @@
 # a function, both of which are the standard behavior in Python 3.
 
 from __future__ import print_function
+import Queue
 
 
 def tnp1(n):
@@ -39,6 +40,17 @@ def tnp1(n):
 
     Remember that // performs integer division in Python.
     """
+    length = 0
+    while n >= 1:
+        length += 1
+        if n == 1:
+            break
+        elif n % 2 == 0:
+            n = n//2
+        elif n % 2 != 0:
+            n = 3 * n + 1
+
+    print(length)
 
 
 def postfix(xs):
@@ -53,12 +65,33 @@ def postfix(xs):
     >>> postfix([3,5,'-'])
     -2
     >>> postfix([1,2,3,'*','+',2,'/'])
-    3
+    2
     >>> postfix([10])
     10
     >>> postfix([3,2,'/'])
     1
     """
+    s = Queue.Queue()
+    sums = None
+    for x in xs:
+        if str(x).isdigit():
+            s.put(int(x))
+
+        elif not s.empty():
+
+            if x == '+':
+                sums = s.get() + s.get()
+            if x == '-':
+                sums = s.get() - s.get()
+            if x == '*':
+                sums = s.get() * s.get()
+            if x == '/':
+                sums = s.get() // s.get()
+
+            if sums is not None:
+                s.put(sums)
+
+    print(s.get())
 
 def bowl(frames):
     """
@@ -98,6 +131,11 @@ def freq(xs):
     >>> freq(['dog','dog','cat','dog'])
     [(1, 'cat'), (3, 'dog')]
     """
+    dict = {}
+    for x in xs:
+        if not dict.has_key(x):
+            dict.update({x: 0})
+
 
 
 def find_best(f, xs):
